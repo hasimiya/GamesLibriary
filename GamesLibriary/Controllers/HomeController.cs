@@ -45,6 +45,7 @@ namespace GamesLibriary.Controllers
                 CurrentPage = page,
                 TotalPages = (int)Math.Ceiling((double)totalGames / pageSize)
             };
+            TempData["message"] = "Игра удалена!";
             return View(viewmodel);
         }
 
@@ -76,7 +77,7 @@ namespace GamesLibriary.Controllers
             }
             _gamesRepository.DeleteGames(games.ID);
             TempData["message"] = "Игра удалена!";
-            return View();
+            return RedirectToAction("Index");
         }
         public IActionResult Edit(int id)
         {

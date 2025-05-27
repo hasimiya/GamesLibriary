@@ -25,7 +25,6 @@
             <button type="submit" class="btn btn-info">Filter</button>
         </form>
     </div>
-
     @foreach (var games in Model.gamesItems)
     {
         <div class="wrapper-block-games">
@@ -45,10 +44,16 @@
                             <input type="hidden" name="id" value="@games.ID" />
                             <button type="submit" class="btn btn-outline-primary">Edit</button>
                         </form>
-                        <form asp-action="Delete" method="post">
-                            <input type="hidden" name="id" value="@games.ID" />
-                            <button type="submit" class="btn btn-outline-danger">Delete</button>
-                        </form>
+
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                data-game-id="@games.ID" data-game-name="@games.Name" onclick="openDeleteModal(this)">
+                            @* data-bs-toggle - используеться для открытия модального окна
+                                data-bs-target - указываем на ID модального окна
+                                data-game-id - передаем ID игры для удаления
+                                data-game-name - передаем название игрі для отображения в модальном окне
+                                onclick - вызываем функцию openDeleteModal, которая заполняет модальное окно данными*@
+                            Delete
+                        </button>
                     </div>
                 </div>
             </div>
@@ -60,5 +65,62 @@
             <a class="btn btn-info" asp-action="Index" asp-route-page="@i">@i</a>
         }
     </div>
-
 </div>
+
+@* Modal Window *@
+
+<div id="deleteModal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="Delete" method="post">
+                <div class="modal-header">
+                    <h4 class="modal-title">Подтверждение удаления</h4>
+                    <img style="width: 35px; height: 35px" src="~/images/icon/bell-icon.png" />
+                    <button type="button" class="btn" data-bs-dismiss="modal">X</button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите удалить <b id="modalGameName"></b>?
+                    <input type="hidden" name="id" id="modalGameId" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Closed</button>
+                    <button type="submit" class="btn btn-outline-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@*
+    aria-hidden - указывает, что модальное окно скрыто от вспомогательных технологий;
+    modal-dialog - класс для стилизации диалогового окна(данный блок отвечает за ширину и отступы);
+    modal-content - класс для стилизации содержимого модального окна(отвечает за установку теней, границ);
+    type="button" - кнопка для закрытия модального окна;
+    type="submit" - кнопка для отправки формы;
+*@
+
+<script>
+    function openDeleteModal(button) {
+        const gameId = button.getAttribute('data-game-id');
+        const gameName = button.getAttribute('data-game-name');
+
+        document.getElementById('modalGameName').textContent = gameName;
+        document.getElementById('modalGameId').value = gameId;
+
+        const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        modal.show();
+    }
+</script>
+
+@*
+    function openDeleteModal(button) - функция, которая вызывается при нажатии кнопки "Delete";
+    button - элемент кнопки, на которую нажали;
+    getAttribute('data-game-id') - получение ID игры из атрибута data-game-id;
+    document - объект, представляющий HTML-документ;
+    getElementById - метод для получения элемента по его ID;
+    textContent - свойство для установки текста элемента;
+    value - свойство для установки значения элемента input;
+    modal = new bootstrap.Modal - создание нового экземпляра модального окна Bootstrap;
+    modal.show() - метод для отображения модального окна;
+*@
