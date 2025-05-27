@@ -45,7 +45,7 @@
                             <button type="submit" class="btn btn-outline-primary">Edit</button>
                         </form>
 
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"
                                 data-game-id="@games.ID" data-game-name="@games.Name" onclick="openDeleteModal(this)">
                             @* data-bs-toggle - используеться для открытия модального окна
                                 data-bs-target - указываем на ID модального окна
@@ -76,14 +76,14 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Подтверждение удаления</h4>
                     <img style="width: 35px; height: 35px" src="~/images/icon/bell-icon.png" />
-                    <button type="button" class="btn" data-bs-dismiss="modal">X</button>
+                    <button type="button" class="btn" data-dismiss="modal">X</button>
                 </div>
                 <div class="modal-body">
                     Вы уверены, что хотите удалить <b id="modalGameName"></b>?
                     <input type="hidden" name="id" id="modalGameId" />
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Closed</button>
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Closed</button>
                     <button type="submit" class="btn btn-outline-danger">Delete</button>
                 </div>
             </form>
