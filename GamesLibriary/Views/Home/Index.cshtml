@@ -1,0 +1,64 @@
+﻿@model GamesLibriary.Models.ViewModel.GamesListViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to Hachhook</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div class="button-action" style="margin-bottom: 10px">
+        <form asp-action="Create" method="get">
+            <button type="submit" class="btn btn-info">Create new +</button>
+        </form>
+        <a class="btn btn-info" href="?sortOrder=title__ascending">↑</a>
+        <a class="btn btn-info" href="?sortOrder=title__descending">↓</a>
+        <form method="get">
+            <select name="gamesGenre" class="btn btn-info">
+                <option value="">All</option>
+                @foreach (var value in Enum.GetValues(typeof(GamesItem.GameGenre)))
+                {
+                    <option value="@value" selected="@(Model.CurrentGenre?.ToString() == value.ToString() ? "selected" : null)">
+                        @value
+                    </option>
+                }
+            </select>
+            <button type="submit" class="btn btn-info">Filter</button>
+        </form>
+    </div>
+
+    @foreach (var games in Model.gamesItems)
+    {
+        <div class="wrapper-block-games">
+            <div class="images">
+                <img src="@Url.Content(games.ImageUrl)" />
+            </div>
+            <div class="description">
+                <h2>@games.Name</h2>
+                <h6>@games.Description</h6>
+                <div style="display: flex; justify-content: space-between">
+                    <div>
+                        <h6>Жанр: @games.Genre</h6>
+                        <h6>Год выпуска: @games.Publication</h6>
+                    </div>
+                    <div class="button-action">
+                        <form asp-action="Edit" method="get">
+                            <input type="hidden" name="id" value="@games.ID" />
+                            <button type="submit" class="btn btn-outline-primary">Edit</button>
+                        </form>
+                        <form asp-action="Delete" method="post">
+                            <input type="hidden" name="id" value="@games.ID" />
+                            <button type="submit" class="btn btn-outline-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div>
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <a class="btn btn-info" asp-action="Index" asp-route-page="@i">@i</a>
+        }
+    </div>
+
+</div>
