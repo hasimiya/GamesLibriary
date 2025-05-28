@@ -12,16 +12,19 @@ namespace GamesLibriary.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IGamesRepository _gamesRepository;
+        private readonly IGamesService _gamesService;
 
-        public HomeController(ILogger<HomeController> logger, IGamesRepository gamesRepository)
+        public HomeController(ILogger<HomeController> logger, IGamesRepository gamesRepository, IGamesService gamesService)
         {
             _logger = logger;
             _gamesRepository = gamesRepository;
+            _gamesService = gamesService;
         }
 
         public IActionResult Index(int page, string sortOrder, GamesItem.GameGenre? gamesGenre)
         {
-            var games = _gamesRepository.GetAllGames();
+            //var games = _gamesRepository.GetAllGames();
+            var games = _gamesService.GetAllGames();
             games = sortOrder switch
             {
                 "title__ascending" => games.OrderBy(x => x.Name).ToList(),

@@ -9,6 +9,5 @@ namespace GamesLibriary.Models
         void DeleteGames(int id);
         GamesItem GetByIdGames(int id);
         void UpdateGames(GamesItem updatedGames);
-
     }
 }
