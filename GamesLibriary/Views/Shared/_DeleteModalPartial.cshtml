@@ -1,0 +1,29 @@
+﻿@* Delete Modal Window *@
+
+<div id="deleteModal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="Delete" method="post">
+                <div class="modal-header">
+                    <h4 class="modal-title">Подтверждение удаления</h4>
+                    <img style="width: 35px; height: 35px" src="~/images/icon/bell-icon.png" />
+                    <button type="button" class="close" data-dismiss="modal">x</button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите удалить <b id="modalGameName"></b>?
+                    <input type="hidden" name="id" id="modalGameId" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Closed</button>
+                    <button type="submit" class="btn btn-outline-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@*aria-hidden - указывает, что модальное окно скрыто от вспомогательных технологий;
+modal-dialog - класс для стилизации диалогового окна(данный блок отвечает за ширину и отступы);
+modal-content - класс для стилизации содержимого модального окна(отвечает за установку теней, границ);
+type="button" - кнопка для закрытия модального окна;
+type="submit" - кнопка для отправки формы;*@

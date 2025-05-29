@@ -56,10 +56,10 @@ namespace GamesLibriary.Controllers
         {
             return View();
         }
-        public IActionResult Create()
-        {
-            return View();
-        }
+        //public IActionResult Create()
+        //{
+        //    return View();
+        //}
         [HttpPost]
         public IActionResult Create(GamesItem games)
         {
@@ -82,11 +82,11 @@ namespace GamesLibriary.Controllers
             TempData["message"] = "Игра удалена!";
             return RedirectToAction("Index");
         }
-        public IActionResult Edit(int id)
-        {
-            var games = _gamesRepository.GetByIdGames(id);
-            return View(games);
-        }
+        //public IActionResult Edit(int id)
+        //{
+        //    var games = _gamesRepository.GetByIdGames(id);
+        //    return View(games);
+        //}
         [HttpPost]
         public IActionResult Edit(GamesItem games)
         {

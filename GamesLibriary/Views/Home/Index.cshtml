@@ -1,6 +1,12 @@
 ﻿@model GamesLibriary.Models.ViewModel.GamesListViewModel
+@using System.Text.Json
+@using System.Text.Json.Serialization
 @{
     ViewData["Title"] = "Home Page";
+    var options = new JsonSerializerOptions
+    {
+        Converters = { new JsonStringEnumConverter() }
+    };
 }
 
 <div class="text-center">
@@ -10,8 +16,9 @@
         <form asp-action="Create" method="get">
             <button type="submit" class="btn btn-info">Create new +</button>
         </form>
-        <a class="btn btn-info" href="?sortOrder=title__ascending">↑</a>
-        <a class="btn btn-info" href="?sortOrder=title__descending">↓</a>
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModal" onclick="openCreateModal(this)">Crete new =</button>
+        <a class="btn btn-info" href="?sortOrder=title__ascending@(Model.CurrentGenre != null ? $"&gamesGenre={Model.CurrentGenre}" : "")">↑</a>
+        <a class="btn btn-info" href="?sortOrder=title__descending@(Model.CurrentGenre != null ? $"&gamesGenre={Model.CurrentGenre}" : "")">↓</a>
         <form method="get">
             <select name="gamesGenre" class="btn btn-info">
                 <option value="">All</option>
@@ -45,12 +52,15 @@
                             <button type="submit" class="btn btn-outline-primary">Edit</button>
                         </form>
 
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" onclick="openEditModal(this)"
+                                data-game='@Html.Raw(JsonSerializer.Serialize(games, options))'>Edit</button>
+
+                        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal"
                                 data-game-id="@games.ID" data-game-name="@games.Name" onclick="openDeleteModal(this)">
-                            @* data-bs-toggle - используеться для открытия модального окна
-                                data-bs-target - указываем на ID модального окна
+                            @* data-toggle - используеться для открытия модального окна
+                                data-target - указываем на ID модального окна
                                 data-game-id - передаем ID игры для удаления
-                                data-game-name - передаем название игрі для отображения в модальном окне
+                                data-game-name - передаем название игры для отображения в модальном окне
                                 onclick - вызываем функцию openDeleteModal, которая заполняет модальное окно данными*@
                             Delete
                         </button>
@@ -62,65 +72,16 @@
     <div>
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
-            <a class="btn btn-info" asp-action="Index" asp-route-page="@i">@i</a>
+            <a class="btn btn-info" asp-action="Index" asp-route-page="@i"
+               asp-route-sortOrder-="@Context.Request.Query["sortOrder"]" asp-route-gamesGenre="@(Model.CurrentGenre?.ToString())">@i</a>
         }
     </div>
 </div>
 
-@* Modal Window *@
+@await Html.PartialAsync("_DeleteModalPartial")
+@await Html.PartialAsync("_EditModalPartial")
+@await Html.PartialAsync("_CreateModalPartial")
 
-<div id="deleteModal" class="modal fade" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form asp-action="Delete" method="post">
-                <div class="modal-header">
-                    <h4 class="modal-title">Подтверждение удаления</h4>
-                    <img style="width: 35px; height: 35px" src="~/images/icon/bell-icon.png" />
-                    <button type="button" class="btn" data-dismiss="modal">X</button>
-                </div>
-                <div class="modal-body">
-                    Вы уверены, что хотите удалить <b id="modalGameName"></b>?
-                    <input type="hidden" name="id" id="modalGameId" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Closed</button>
-                    <button type="submit" class="btn btn-outline-danger">Delete</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-@*
-    aria-hidden - указывает, что модальное окно скрыто от вспомогательных технологий;
-    modal-dialog - класс для стилизации диалогового окна(данный блок отвечает за ширину и отступы);
-    modal-content - класс для стилизации содержимого модального окна(отвечает за установку теней, границ);
-    type="button" - кнопка для закрытия модального окна;
-    type="submit" - кнопка для отправки формы;
-*@
-
-<script>
-    function openDeleteModal(button) {
-        const gameId = button.getAttribute('data-game-id');
-        const gameName = button.getAttribute('data-game-name');
-
-        document.getElementById('modalGameName').textContent = gameName;
-        document.getElementById('modalGameId').value = gameId;
-
-        const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
-        modal.show();
-    }
-</script>
-
-@*
-    function openDeleteModal(button) - функция, которая вызывается при нажатии кнопки "Delete";
-    button - элемент кнопки, на которую нажали;
-    getAttribute('data-game-id') - получение ID игры из атрибута data-game-id;
-    document - объект, представляющий HTML-документ;
-    getElementById - метод для получения элемента по его ID;
-    textContent - свойство для установки текста элемента;
-    value - свойство для установки значения элемента input;
-    modal = new bootstrap.Modal - создание нового экземпляра модального окна Bootstrap;
-    modal.show() - метод для отображения модального окна;
-*@
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 
