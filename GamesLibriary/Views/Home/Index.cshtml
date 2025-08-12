@@ -1,4 +1,4 @@
-﻿@model GamesLibriary.Models.ViewModel.GamesListViewModel
+@model GamesLibriary.Models.ViewModel.GamesListViewModel
 @using System.Text.Json
 @using System.Text.Json.Serialization
 @{
@@ -13,10 +13,10 @@
     <h1 class="display-4">Welcome to Hachhook</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     <div class="button-action" style="margin-bottom: 10px">
-        <form asp-action="Create" method="get">
+        @* <form asp-action="Create" method="get">
             <button type="submit" class="btn btn-info">Create new +</button>
-        </form>
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModal" onclick="openCreateModal(this)">Crete new =</button>
+        </form> *@
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModal" onclick="openCreateModal(this)">Crete new +</button>
         <a class="btn btn-info" href="?sortOrder=title__ascending@(Model.CurrentGenre != null ? $"&gamesGenre={Model.CurrentGenre}" : "")">↑</a>
         <a class="btn btn-info" href="?sortOrder=title__descending@(Model.CurrentGenre != null ? $"&gamesGenre={Model.CurrentGenre}" : "")">↓</a>
         <form method="get">
@@ -47,10 +47,10 @@
                         <h6>Год выпуска: @games.Publication</h6>
                     </div>
                     <div class="button-action">
-                        <form asp-action="Edit" method="get">
+                        @* <form asp-action="Edit" method="post">
                             <input type="hidden" name="id" value="@games.ID" />
                             <button type="submit" class="btn btn-outline-primary">Edit</button>
-                        </form>
+                        </form> *@
 
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" onclick="openEditModal(this)"
                                 data-game='@Html.Raw(JsonSerializer.Serialize(games, options))'>Edit</button>
